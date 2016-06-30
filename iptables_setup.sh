@@ -1,6 +1,6 @@
 #!/bin/bash
-# Type : Installation automatique d'une VM
-# Date : 25 Juin 2016
+# Type : Auto-Config of Iptables !
+# Date : 30 Juin 2016
 # Author : Yan Bourgeois 
 
 function DROP(){
