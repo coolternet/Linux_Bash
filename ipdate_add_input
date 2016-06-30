@@ -36,7 +36,7 @@ function Port(){
 }
 
 function Rules(){
-	-A INPUT --protocol $Protocol --source $Sources --match tcp --destination-port $Ports -j ACCEPT # $Comments
+	iptable -A INPUT --protocol $Protocol --source $Sources --match tcp multiport --dport $Ports -j ACCEPT # $Comments
 }
 
 clear
