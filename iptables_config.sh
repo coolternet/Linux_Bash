@@ -1,6 +1,6 @@
 #!/bin/bash
 # Type : Installation automatique d'une VM
-# Date : 25 Juin 2016
+# Date : 23 Juin 2016
 # Author : Yan Bourgeois 
 
 function DROP(){
