@@ -11,7 +11,7 @@ function DROP(){
 }
 
 function Ping(){
-	-A INPUT --protocol icmp --match icmp --icmp-type 8 -j DROP # No Ping
+	iptables -A INPUT --protocol icmp --match icmp --icmp-type 8 -j DROP # No Ping
 }
 
 function Port(){
