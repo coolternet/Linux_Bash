@@ -7,7 +7,7 @@ function DROP(){
 	iptables -P INPUT DROP
 	iptables -P FORWARD DROP
 	iptables -P OUTPUT ACCEPT
-	-A INPUT --match state --state RELATED,ESTABLISHED -j ACCEPT
+	iptables -A INPUT --match state --state RELATED,ESTABLISHED -j ACCEPT
 }
 
 function Ping(){
@@ -36,7 +36,7 @@ function Port(){
 }
 
 function Rules(){
-	iptable -A INPUT --protocol $Protocol --source $Sources --match tcp multiport --dport $Ports -j ACCEPT # $Comments
+	iptable -A INPUT --protocol $Protocol --source $Sources --match tcp -m multiport --dport $Ports -j ACCEPT # $Comments
 }
 
 clear
