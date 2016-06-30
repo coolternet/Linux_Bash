@@ -40,9 +40,8 @@ iface eth0 inet static
 		pre-down route del default gw $HOSTIP
 " > /etc/network/interfaces
 
-	rm /etc/resolv.conf
-echo -e "nameserver $NSIP
-nameserver 8.8.8.8
+echo -e "nameserver 8.8.8.8
+nameserver $NSIP
 " > /etc/resolv.conf
 
 	rm /etc/apt/sources.list
@@ -53,26 +52,34 @@ deb-src http://httpredir.debian.org/debian jessie-updates main
 deb http://security.debian.org/ jessie/updates main
 deb-src http://security.debian.org/ jessie/updates main
 " > /etc/apt/sources.list
+	service networking restart
 }
 
-function firewall(){
-	iptables -A INPUT -p icmp --icmp-type echo-request -j REJECT
+function openSSH(){
+	apt-get update
+	apt-get upgrade
+	apt-get install openssh-server
+}
+
+function finish(){
+	echo -e "Thank you to using Evo-VMC"
+	echo -e "You can execute the shell script for setting up firewall"
 }
 
 while true; do
     read -p "Are you sure all information is correct ? [yes / no] : " yn
     case $yn in
         [Yy]* ) install; break;;
-        [Nn]* ) clear; echo -e "The installation has failed. Restart the process.";;
+        [Nn]* ) clear; echo -e "The installation has failed. Restart the process."; exit;;
         * ) echo "Please answer yes or no.";;
     esac
 done
 
 while true; do
-    read -p "Do you want to disallow ICMP Request ? [yes / no] : " yn
+    read -p "Do you want to proceed to Update / Upgrade and install OpenSSH-Server ? [yes / no] : " yn
     case $yn in
-        [Yy]* ) firewall; echo "Patch apply with success"; break;;
-        [Nn]* ) echo "installation completed with success"; exit;;
+        [Yy]* ) openSSH; break;;
+        [Nn]* ) finish; exit;;
         * ) echo "Please answer yes or no.";;
     esac
 done
