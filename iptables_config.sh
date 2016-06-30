@@ -1,7 +1,18 @@
 #!/bin/bash
 # Type : Installation automatique d'une VM
-# Date : 30 Juin 2016
-# Author : Yan Bourgeois
+# Date : 25 Juin 2016
+# Author : Yan Bourgeois 
+
+function DROP(){
+	iptables -P INPUT DROP
+	iptables -P FORWARD DROP
+	iptables -P OUTPUT ACCEPT
+	-A INPUT --match state --state RELATED,ESTABLISHED -j ACCEPT
+}
+
+function Ping(){
+	-A INPUT --protocol icmp --match icmp --icmp-type 8 -j DROP # No Ping
+}
 
 function Port(){
 
@@ -35,6 +46,24 @@ echo "########### Evolution-Network :: Iptables Rules Configuration ##########"
 echo "############################ Welcome to IRC ############################"
 echo -e "########################################################################
 "
+
+while true; do
+    read -p "The first step, you need to close all ports. Do you want to do that ? [yes / no] : " yn
+    case $yn in
+        [Yy]* ) Port; break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+while true; do
+    read -p "Do you want to block all ping request incoming ? [yes / no] : " yn
+    case $yn in
+        [Yy]* ) Ping; break;;
+        [Nn]* ) break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
 
 while true; do
     read -p "Do you want to add a new rule to iptables ? [yes / no] : " yn
