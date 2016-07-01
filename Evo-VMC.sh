@@ -11,20 +11,30 @@ echo "############################ Welcome to VMC ############################"
 echo -e "########################################################################
 "
 
-read -p "Enter the VM IP : " VMIP
-
-read -p "Enter the Hoster IP : " HOSTIP
-
-read -p "Enter the NameServer : " NSIP
-
-read -p "Enter the NetMask IP : " MSKIP
-
-echo -e "
-	Client IP : $VMIP
-	Server IP : $HOSTIP
-	NameServer : $NSIP
-	MaskNet : $MSKIP
-"
+function ips(){
+	read -p "Enter the VM IP : " VMIP
+	
+	read -p "Enter the Hoster IP : " HOSTIP
+	
+	read -p "Enter the NameServer : " NSIP
+	
+	read -p "Enter the NetMask IP : " MSKIP
+	
+	echo -e "
+		Client IP : $VMIP
+		Server IP : $HOSTIP
+		NameServer : $NSIP
+		MaskNet : $MSKIP
+	"
+	while true; do
+	    read -p "Are you sure all information is correct ? [yes / no] : " yn
+	    case $yn in
+	        [Yy]* ) install; break;;
+	        [Nn]* ) clear; ips; break;;
+	        * ) echo "Please answer yes or no.";;
+	    esac
+	done
+}
 
 function install(){
 	rm /etc/network/interfaces
@@ -56,9 +66,9 @@ deb-src http://security.debian.org/ jessie/updates main
 }
 
 function openSSH(){
-	apt-get update
-	apt-get upgrade
-	apt-get install openssh-server
+	apt-get --assume-yes update
+	apt-get --assume-yes upgrade
+	apt-get --assume-yes install openssh-server
 }
 
 function finish(){
@@ -67,10 +77,10 @@ function finish(){
 }
 
 while true; do
-    read -p "Are you sure all information is correct ? [yes / no] : " yn
+    read -p "Do you want to configure Ips immediatly ? [yes / no] : " yn
     case $yn in
-        [Yy]* ) install; break;;
-        [Nn]* ) clear; echo -e "The installation has failed. Restart the process."; exit;;
+        [Yy]* ) ips; break;;
+        [Nn]* ) break;;
         * ) echo "Please answer yes or no.";;
     esac
 done
