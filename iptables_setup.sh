@@ -36,7 +36,7 @@ function Port(){
 }
 
 function Rules(){
-	iptables -A INPUT --protocol $Protocol --source $Sources -m multiport --dport $Ports -j ACCEPT # $Comments
+	iptables -A INPUT --protocol $Protocol --source $Sources -m multiport --dports $Ports -j ACCEPT # $Comments
 }
 
 clear
