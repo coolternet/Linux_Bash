@@ -78,7 +78,7 @@ while true; do
     read -p "The information appear to be correct ? [yes / no] : " yn
     case $yn in
         [Yy]* ) Rules; echo "The rule has been added to iptables. Thank you to useing EvoNet Tools !"; break;;
-        [Nn]* ) clear; Port; exit;;
+        [Nn]* ) clear; Port; break;;
         * ) echo "Please answer yes or no.";;
     esac
 done
