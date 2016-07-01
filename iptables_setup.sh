@@ -77,7 +77,7 @@ done
 while true; do
     read -p "The information appear to be correct ? [yes / no] : " yn
     case $yn in
-        [Yy]* ) Rules; echo "The rule has been added to iptables. Thank you to useing EvoNet Tools !"; break;;
+        [Yy]* ) Rules; echo "The rule has been added to iptables. Thank you to useing EvoNet Tools !"; exit;;
         [Nn]* ) clear; Port; break;;
         * ) echo "Please answer yes or no.";;
     esac
