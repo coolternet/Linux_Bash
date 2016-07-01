@@ -39,6 +39,11 @@ function Rules(){
 	iptables -A INPUT --protocol $Protocol --source $Sources -m multiport --dports $Ports -j ACCEPT # $Comments
 }
 
+function finish(){
+	apt-get --assume-yes install iptables-persistent
+	invoke-rc.d iptables-persistent save
+}
+
 clear
 
 echo "########################################################################"
@@ -69,7 +74,7 @@ while true; do
     read -p "Do you want to add a new rule to iptables ? [yes / no] : " yn
     case $yn in
         [Yy]* ) Port; break;;
-        [Nn]* ) clear; exit;;
+        [Nn]* ) clear; finish; exit;;
         * ) echo "Please answer yes or no.";;
     esac
 done
