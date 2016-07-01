@@ -53,7 +53,7 @@ echo -e "#######################################################################
 "
 
 while true; do
-    read -p "The first step, you need to close all ports. Do you want to do that ? [yes / no] : " yn
+    read -p "Do you want to close all port ? [yes / no] : " yn
     case $yn in
         [Yy]* ) DROP; break;;
         [Nn]* ) break;;
