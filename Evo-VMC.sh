@@ -63,6 +63,12 @@ deb http://security.debian.org/ jessie/updates main
 deb-src http://security.debian.org/ jessie/updates main
 " > /etc/apt/sources.list
 	service networking restart
+	
+	rm /etc/rc.local
+echo -e "#!/bin/sh -e
+iptables-restore < /etc/iptables.rules
+exit 0
+" > /etc/rc.local
 }
 
 function openSSH(){
