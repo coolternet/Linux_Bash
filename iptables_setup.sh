@@ -42,6 +42,7 @@ function Rules(){
 function finish(){
 	apt-get --assume-yes install iptables-persistent
 	invoke-rc.d iptables-persistent save
+	iptables-save > /etc/iptables.rules
 }
 
 clear
