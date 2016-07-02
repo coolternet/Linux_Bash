@@ -45,6 +45,14 @@ function finish(){
 	iptables-save > /etc/iptables.rules
 }
 
+function setup_inf(){
+	rm /etc/rc.local
+echo -e "#!/bin/sh -e
+iptables-restore < /etc/iptables.rules
+exit 0
+" > /etc/rc.local
+}
+
 clear
 
 echo "########################################################################"
@@ -52,6 +60,15 @@ echo "########### Evolution-Network :: Iptables Rules Configuration ##########"
 echo "############################ Welcome to IRC ############################"
 echo -e "########################################################################
 "
+
+while true; do
+    read -p "Have you run evo_vmc.sh before? ? [yes / no] : " yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) setup_inf; break;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
 
 while true; do
     read -p "Do you want to close all port ? [yes / no] : " yn
