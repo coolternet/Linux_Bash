@@ -14,17 +14,8 @@ echo -e "#######################################################################
 function ips(){
 	read -p "Enter the VM IP : " VMIP
 	
-	read -p "Enter the Hoster IP : " HOSTIP
-	
-	read -p "Enter the NameServer : " NSIP
-	
-	read -p "Enter the NetMask IP : " MSKIP
-	
 	echo -e "
-		Client IP : $VMIP
-		Server IP : $HOSTIP
-		NameServer : $NSIP
-		MaskNet : $MSKIP
+		Virtual Machine IP : $VMIP
 	"
 	while true; do
 	    read -p "Are you sure all information is correct ? [yes / no] : " yn
@@ -38,37 +29,35 @@ function ips(){
 
 function install(){
 	rm /etc/network/interfaces
-echo "auto lo eth0
-iface lo inet loopback
-iface eth0 inet static
-	address $VMIP
-	netmask $MSKIP
-	broadcast $VMIP
-		post-up route add $HOSTIP dev eth0
-		post-up route add default gw $HOSTIP
-		pre-down route del $HOSTIP dev eth0
-		pre-down route del default gw $HOSTIP
-" > /etc/network/interfaces
+	echo "auto lo eth0
+	iface lo inet loopback
+	iface eth0 inet static
+		address $VMIP
+		netmask 255.255.255.255
+		broadcast 192.99.37.254
+		gateway $VMIP
+		post-up route add 192.99.37.254 dev eth0
+		post-up route add default gw 192.99.37.254
+		pre-down route del 192.99.37.254 dev eth0
+		pre-down route del default gw 192.99.37.254
+	" > /etc/network/interfaces
 
-echo -e "nameserver 8.8.8.8
-nameserver $NSIP
-" > /etc/resolv.conf
+	echo -e "nameserver 8.8.8.8 # Google DNS Server
+	nameserver 213.186.33.99 # OVH DNS Server
+	" > /etc/resolv.conf
 
 	rm /etc/apt/sources.list
-echo -e "deb http://httpredir.debian.org/debian jessie main
-deb-src http://httpredir.debian.org/debian jessie main
-deb http://httpredir.debian.org/debian jessie-updates main
-deb-src http://httpredir.debian.org/debian jessie-updates main
-deb http://security.debian.org/ jessie/updates main
-deb-src http://security.debian.org/ jessie/updates main
-" > /etc/apt/sources.list
-	service networking restart
 	
-	rm /etc/rc.local
-echo -e "#!/bin/sh -e
-iptables-restore < /etc/iptables.rules
-exit 0
-" > /etc/rc.local
+	echo -e "# Debian Jessie, dépôt principal + paquets non libres
+	deb http://deb.debian.org/debian/ jessie main contrib non-free
+	# Debian Jessie, mises à jour de sécurité + paquets non libres
+	deb http://security.debian.org/ jessie/updates main contrib non-free
+	# Debian Jessie, mises à jour "volatiles" + paquets non libres
+	deb http://deb.debian.org/debian/ jessie-updates main contrib non-free
+	" > /etc/apt/sources.list
+
+	service networking restart
+
 }
 
 function openSSH(){
@@ -79,17 +68,7 @@ function openSSH(){
 
 function finish(){
 	echo -e "Thank you to using Evo-VMC"
-	echo -e "You can execute the shell script for setting up firewall"
 }
-
-while true; do
-    read -p "Do you want to configure Ips immediatly ? [yes / no] : " yn
-    case $yn in
-        [Yy]* ) ips; break;;
-        [Nn]* ) break;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
 
 while true; do
     read -p "Do you want to proceed to Update / Upgrade and install OpenSSH-Server ? [yes / no] : " yn
